@@ -268,6 +268,10 @@ typedef struct mrb_state {
   struct symbol_name *symtbl;   /* symbol table */
   mrb_sym symhash[256];
   size_t symcapa;
+
+  mrb_sym sym_default;  /* the `:default` symbol, precached. */
+  mrb_sym sym_initialize;  /* the `:initialize` symbol, precached. */
+
 #ifndef MRB_USE_ALL_SYMBOLS
   char symbuf[8];               /* buffer for small symbol names */
 #endif

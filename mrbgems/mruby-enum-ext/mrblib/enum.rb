@@ -253,7 +253,7 @@ module Enumerable
         count += 1 if block.call(*val)
       end
     else
-      if v == NONE
+      if NONE == v
         self.each { count += 1 }
       else
         self.each do |*val|
@@ -708,7 +708,7 @@ module Enumerable
   #
 
   def find_index(val=NONE, &block)
-    return to_enum(:find_index, val) if !block && val == NONE
+    return to_enum(:find_index, val) if !block && NONE == val
 
     idx = 0
     if block

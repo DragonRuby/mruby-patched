@@ -62,9 +62,13 @@ MRB_API mrb_value mrb_num_mul(mrb_state *mrb, mrb_value x, mrb_value y);
 // implementation for them.
 */
 #ifdef MRB_HAVE_TYPE_GENERIC_CHECKED_ARITHMETIC_BUILTINS
+#if defined(__arm__) && !defined(__LP64__)  /* ryan changed this: it seems to kill arm32 builds, research more. */
+#undef MRB_HAVE_TYPE_GENERIC_CHECKED_ARITHMETIC_BUILTINS
+#else
 #if defined(__clang__) && (__clang_major__ == 3) && (__clang_minor__ >= 8) && \
     defined(MRB_32BIT) && defined(MRB_INT64)
 #undef MRB_HAVE_TYPE_GENERIC_CHECKED_ARITHMETIC_BUILTINS
+#endif
 #endif
 #endif
 

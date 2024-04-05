@@ -1943,7 +1943,7 @@ mrb_obj_new(mrb_state *mrb, struct RClass *c, mrb_int argc, const mrb_value *arg
   mrb_sym mid;
 
   obj = mrb_instance_alloc(mrb, mrb_obj_value(c));
-  mid = MRB_SYM(initialize);
+  mid = mrb->sym_initialize;
   if (!mrb_func_basic_p(mrb, obj, mid, mrb_bob_init)) {
     mrb_funcall_argv(mrb, obj, mid, argc, argv);
   }
@@ -2819,6 +2819,8 @@ init_class_new(mrb_state *mrb, struct RClass *cls)
   mrb_method_t m;
 
   MRB_PRESYM_INIT_SYMBOLS(mrb, new_syms);
+  mrb->sym_default = MRB_SYM(default);  /* cache for mrb_hash_get's use */
+  mrb->sym_initialize = MRB_SYM(initialize);  /* cache for mrb_obj_new's use */
   p = mrb_proc_new(mrb, &new_irep);
   MRB_METHOD_FROM_PROC(m, p);
   mrb_define_method_raw(mrb, cls, MRB_SYM(new), m);

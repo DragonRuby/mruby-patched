@@ -328,13 +328,15 @@ obj_eql(mrb_state *mrb, mrb_value a, mrb_value b, struct RHash *h)
     return mrb_symbol(a) == mrb_symbol(b);
 
   case MRB_TT_INTEGER:
-    if (!mrb_integer_p(b)) return FALSE;
-    return mrb_integer(a) == mrb_integer(b);
+    if (!mrb_integer_p(b) && !mrb_float_p(b)) return FALSE;
+    if (mrb_integer_p(b)) return mrb_integer(a) == mrb_integer(b);
+    return ((mrb_float)mrb_integer(a)) == mrb_float(b);
 
 #ifndef MRB_NO_FLOAT
   case MRB_TT_FLOAT:
-    if (!mrb_float_p(b)) return FALSE;
-    return mrb_float(a) == mrb_float(b);
+    if (!mrb_integer_p(b) && !mrb_float_p(b)) return FALSE;
+    if (mrb_float_p(b)) return mrb_float(a) == mrb_float(b);
+    return mrb_float(a) == ((mrb_float)mrb_integer(b));
 #endif
 
   default:
@@ -1181,7 +1183,8 @@ mrb_hash_get(mrb_state *mrb, mrb_value hash, mrb_value key)
     return val;
   }
 
-  mid = MRB_SYM(default);
+  mid = mrb->sym_default;
+
   if (mrb_func_basic_p(mrb, hash, mid, mrb_hash_default)) {
     return hash_default(mrb, hash, key);
   }

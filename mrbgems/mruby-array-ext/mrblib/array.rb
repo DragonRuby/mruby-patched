@@ -333,7 +333,7 @@ class Array
     end
     if idx < 0 || size <= idx
       return block.call(n) if block
-      if ifnone == NONE
+      if NONE == ifnone
         raise IndexError, "index #{n} outside of array bounds: #{-size}...#{size}"
       end
       return ifnone

@@ -373,7 +373,7 @@ current_mrb_time(mrb_state *mrb)
   struct mrb_time *tm;
   time_t sec, usec;
 
-#if defined(TIME_UTC) && !defined(__ANDROID__)
+#if defined(TIME_UTC) && !defined(__ANDROID__) && !defined(__APPLE__)
   {
     struct timespec ts;
     if (timespec_get(&ts, TIME_UTC) == 0) {

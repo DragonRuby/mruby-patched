@@ -2297,10 +2297,10 @@ RETRY_TRY_BLOCK:
       switch (TYPES2(mrb_type(regs[a]),mrb_type(regs[a+1]))) {
       case TYPES2(MRB_TT_INTEGER,MRB_TT_INTEGER):
         {
-          mrb_int x = mrb_integer(regs[a]);
-          mrb_int y = mrb_integer(regs[a+1]);
-          mrb_int div = mrb_num_div_int(mrb, x, y);
-          SET_INT_VALUE(mrb, regs[a], div);
+          x = (mrb_float)mrb_integer(regs[a]);
+          y = (mrb_float)mrb_integer(regs[a+1]);
+          f = mrb_num_div_flo(mrb, x, y);
+          SET_FLOAT_VALUE(mrb, regs[a], f);
         }
         NEXT;
 #ifndef MRB_NO_FLOAT
@@ -2400,16 +2400,16 @@ RETRY_TRY_BLOCK:
   /* need to check if - is overridden */\
   switch (TYPES2(mrb_type(regs[a]),mrb_type(regs[a+1]))) {\
   case TYPES2(MRB_TT_INTEGER,MRB_TT_INTEGER):\
-    result = OP_CMP_BODY(op,mrb_fixnum,mrb_fixnum);\
+    result = mrb_to_flo(mrb, regs[a]) op (mrb_float)mrb_integer(regs[a+1]); \
     break;\
   case TYPES2(MRB_TT_INTEGER,MRB_TT_FLOAT):\
-    result = OP_CMP_BODY(op,mrb_fixnum,mrb_float);\
+    result = mrb_to_flo(mrb, regs[a]) op mrb_float(regs[a+1]); \
     break;\
   case TYPES2(MRB_TT_FLOAT,MRB_TT_INTEGER):\
-    result = OP_CMP_BODY(op,mrb_float,mrb_fixnum);\
+    result = mrb_float(regs[a]) op mrb_to_flo(mrb, regs[a+1]); \
     break;\
   case TYPES2(MRB_TT_FLOAT,MRB_TT_FLOAT):\
-    result = OP_CMP_BODY(op,mrb_float,mrb_float);\
+    result = mrb_float(regs[a]) op mrb_float(regs[a+1]); \
     break;\
   default:\
     c = 1;\
